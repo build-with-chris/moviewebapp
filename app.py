@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, url_for
 import os
 from werkzeug.utils import redirect
 from datamanager import SQLiteDataManager
-from models import db, User
+from models import db, User, Movie
 import fetch_movie_data
 
 app = Flask(__name__)
@@ -43,18 +43,21 @@ def add_user():
     return render_template('add_user.html')
 
 
-@app.route('/users/<user_id>/add_movie', methods=["GET", "POST"])
-def add_movie():
+@app.route('/users/<int:user_id>/add_movie', methods=["GET", "POST"])
+def add_movie(user_id):
     if request.method == 'POST':
         title = request.form['title']
         values = fetch_movie_data.fetching_movie_data(title)
-        if "Movie not found" in values or "Error" in values:
-            print(values)
-            return
-        else:
-            title_from_api, year, rating, poster, imdb_url = values
-    else:
-        return render_template('add_movie.html')
+        if isinstance(values, str):
+            flash(values)
+            return redirect(url_for('list_user_movies', user_id=user_id))
+
+        title_from_api, year, rating, director, poster, imdb_url = values
+        data_manager.add_movie(user_id, title_from_api, year, rating, director, poster, imdb_url)
+        flash(f'Movie "{title_from_api}" was successfully added.')
+        return redirect(url_for('list_user_movies', user_id=user_id))
+
+    return render_template('add_movie.html')
 
 
 
@@ -69,5 +72,6 @@ def delete_movie(user_id, movie_id):
 
 if __name__ == '__main__':
     with app.app_context():
+        db.drop_all()
         db.create_all()
     app.run(debug=True)

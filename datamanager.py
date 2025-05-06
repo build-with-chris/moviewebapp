@@ -1,6 +1,3 @@
-from flask import request, url_for
-from werkzeug.utils import redirect
-
 from models import db, User, Movie
 from data_manager_interface import DataManagerInterface
 
@@ -24,16 +21,20 @@ class SQLiteDataManager(DataManagerInterface):
         self.db.session.commit()
         return user
 
-    def add_movie(self, user_id, movie_data):
+    def add_movie(self, user_id, title, year, rating, director, imdb_url, poster_url):
         new_movie = Movie(
-            movie_name = movie_data['name'],
-            movie_director=movie_data['director'],
-            movie_year=movie_data['year'],
-            movie_rating=movie_data['rating'],
+            movie_name=title,
+            movie_year=year,
+            movie_rating=rating,
+            movie_director=director,
+            imdb_url=imdb_url,
+            poster_url=poster_url,
             user_id=user_id
+
         )
         self.db.session.add(new_movie)
         self.db.session.commit()
+        return new_movie
 
     def update_movie(self, movie_id, movie_data):
         movie=Movie.query.get(movie_id)

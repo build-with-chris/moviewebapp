@@ -20,6 +20,8 @@ class Movie(db.Model):
     movie_director = db.Column(db.String)
     movie_year = db.Column(db.Integer)
     movie_rating = db.Column(db.Float)
+    poster_url = db.Column(db.String)
+    imdb_url = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
 
