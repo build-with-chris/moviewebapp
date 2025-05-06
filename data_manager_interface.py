@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from flask_sqlalchemy import SQLAlchemy
 
 class DataManagerInterface(ABC):
 
