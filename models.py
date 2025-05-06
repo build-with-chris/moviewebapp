@@ -12,7 +12,7 @@ class User(db.Model):
         return f"User(id = {self.user_id}, name = {self.user_name})"
 
 
-class Movies(db.Model):
+class Movie(db.Model):
     __tablename__ = 'movies'
 
     movie_id = db.Column(db.Integer, primary_key=True)
@@ -23,5 +23,4 @@ class Movies(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
 
-Base.metadata.create_all(engine)
-session.commit()
+
