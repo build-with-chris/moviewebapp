@@ -1,3 +1,6 @@
+from flask import request, url_for
+from werkzeug.utils import redirect
+
 from models import db, User, Movie
 from data_manager_interface import DataManagerInterface
 
@@ -9,8 +12,17 @@ class SQLiteDataManager(DataManagerInterface):
     def get_all_users(self):
         return User.query.all()
 
+    def get_user(self, user_id):
+        return User.query.get(user_id)
+
     def get_user_movies(self, user_id):
         return Movie.query.filter_by(user_id=user_id).all()
+
+    def add_user(self, name):
+        user = User(user_name=name)
+        self.db.session.add(user)
+        self.db.session.commit()
+        return user
 
     def add_movie(self, user_id, movie_data):
         new_movie = Movie(

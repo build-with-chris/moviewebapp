@@ -1,10 +1,14 @@
-from flask import Flask, render_template, request
+from crypt import methods
+
+from flask import Flask, render_template, request, flash, url_for
 import os
+from werkzeug.utils import redirect
 from datamanager import SQLiteDataManager
 from models import db, User
+import fetch_movie_data
 
 app = Flask(__name__)
-
+app.secret_key = 'Ch09Mi03P1p1'
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'data', 'moviewebapp.db')
@@ -21,17 +25,37 @@ def list_users():
     users = data_manager.get_all_users()
     return render_template('users.html', users=users)
 
-@app.route('/users/<user_id>')
+@app.route('/users/<int:user_id>')
 def list_user_movies(user_id):
-    pass
+    user = data_manager.get_user(user_id)
+    movies = data_manager.get_user_movies(user_id)
+    if not user:
+        return f"User not found"
+    return render_template('user_movies.html', user=user, movies=movies)
 
-@app.route('/add_user')
+@app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
-    pass
+    if request.method=='POST':
+        name = request.form['name']
+        user=data_manager.add_user(name)
+        flash(f'User {user.user_name} was successfully added.')
+        return redirect(url_for('list_users'))
+    return render_template('add_user.html')
 
-@app.route('/users/<user_id>/add_movie')
+
+@app.route('/users/<user_id>/add_movie', methods=["GET", "POST"])
 def add_movie():
-    pass
+    if request.method == 'POST':
+        title = request.form['title']
+        values = fetch_movie_data.fetching_movie_data(title)
+        if "Movie not found" in values or "Error" in values:
+            print(values)
+            return
+        else:
+            title_from_api, year, rating, poster, imdb_url = values
+    else:
+        return render_template('add_movie.html')
+
 
 
 @app.route('/users/<user_id>/update_movie/<movie_id>')
