@@ -61,17 +61,34 @@ def add_movie(user_id):
 
 
 
-@app.route('/users/<user_id>/update_movie/<movie_id>')
+@app.route('/users/<user_id>/update_movie/<movie_id>', methods=["GET", "POST"])
 def update_movie(user_id, movie_id):
-    pass
+    movie = data_manager.get_movie(movie_id)
+    if request.method =='POST':
+        updated_details = {
+            "name" : request.form["name"],
+            "director" : request.form["director"],
+            "year" : request.form["year"],
+            "rating" : request.form["rating"]
+        }
+        data_manager.update_movie(movie_id, updated_details)
+        flash("Movie is updated")
+        return redirect(url_for('list_user_movies', user_id=user_id))
 
-@app.route('/users/<user_id>/delete_movie/<movie_id>')
+    return render_template("update_movie.html", movie=movie, user_id=user_id)
+
+
+@app.route('/users/<user_id>/delete_movie/<movie_id>', methods=["POST"])
 def delete_movie(user_id, movie_id):
-    pass
+    movie = data_manager.get_movie(movie_id)
+    if request.method == 'POST':
+        data_manager.delete_movie(movie_id)
+        flash(f'Movie {movie.name} was successfully deleted.')
+    return redirect(url_for(f'/users/{user_id}'))
+
 
 
 if __name__ == '__main__':
     with app.app_context():
-        db.drop_all()
         db.create_all()
     app.run(debug=True)

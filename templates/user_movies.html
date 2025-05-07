@@ -15,11 +15,16 @@
         <img class="movie-poster" src="{{ movie.poster_url }}" alt="Poster for {{ movie.movie_name }}" />
         {{ movie.movie_name }} ({{ movie.movie_year }}) – Rating: {{ movie.movie_rating }}
         <a href="{{ movie.imdb_url }}" target="_blank">More on IMDb</a>
+         <button onclick="window.location.href = '/users/{{ user.user_id }}/update_movie/{{ movie.movie_id}}';">🖊️  Update Movie</button>
+         <button onclick="window.location.href = '/users/{{ user.user_id }}/delete_movie/{{ movie.movie_id}}';">X  Delete Movie</button>
     {% else %}
         <li>
             No movies in here yet
         </li>
     {% endfor %}
+    <button onclick="window.location.href = '/users/{{ user.user_id }}/add_movie';">➕ Add Movie</button>
+
+
 </ul>
 </body>
 </html>

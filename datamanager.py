@@ -12,6 +12,9 @@ class SQLiteDataManager(DataManagerInterface):
     def get_user(self, user_id):
         return User.query.get(user_id)
 
+    def get_movie(self, movie_id):
+        return Movie.query.get(movie_id)
+
     def get_user_movies(self, user_id):
         return Movie.query.filter_by(user_id=user_id).all()
 
@@ -39,11 +42,12 @@ class SQLiteDataManager(DataManagerInterface):
     def update_movie(self, movie_id, movie_data):
         movie=Movie.query.get(movie_id)
         if movie:
-            movie.movie_name = movie_data.get(movie_data['name'], movie.movie_name),
-            movie.movie_director = movie_data.get(movie_data['director'], movie.movie_director)
-            movie.movie_year = movie_data.get(movie_data['year'], movie.movie_year),
-            movie.movie_rating = movie_data.get(movie_data['rating'], movie.movie_rating)
+            movie.movie_name = movie_data.get('name', movie.movie_name)
+            movie.movie_director = movie_data.get('director', movie.movie_director)
+            movie.movie_year = movie_data.get('year', movie.movie_year)
+            movie.movie_rating = movie_data.get('rating', movie.movie_rating)
             self.db.session.commit()
+        return movie
 
     def delete_movie(self, movie_id):
         movie=Movie.query.get(movie_id)
