@@ -27,6 +27,7 @@ def list_users():
     users = data_manager.get_all_users()
     return render_template('users.html', users=users)
 
+
 @app.route('/all_movies')
 def all_movies():
     movies = Movie.query.all()
@@ -45,8 +46,13 @@ def list_user_movies(user_id):
 def add_user():
     if request.method=='POST':
         name = request.form['name']
-        user=data_manager.add_user(name)
-        flash(f'User {user.user_name} was successfully added.')
+        try:
+            user=data_manager.add_user(name)
+            flash(f'User {user.user_name} was successfully added.')
+
+        except Exception as e:
+            flash("Could not save the user.")
+            print("DB Error:", e)
         return redirect(url_for('list_users'))
     return render_template('add_user.html')
 
@@ -58,15 +64,19 @@ def add_movie(user_id):
         title = request.form['title']
 
         values = fetch_movie_data.fetching_movie_data(title)
-        print("🎯 fetch_movie_data returned:", values)
+
         if isinstance(values, str):
             flash(values)
             return redirect(url_for('list_user_movies', user_id=user_id))
 
         title_from_api, year, rating, director, poster, imdb_url = values
-        data_manager.add_movie(user_id, title_from_api, year, rating, director, poster, imdb_url)
-        flash(f'Movie "{title_from_api}" was successfully added.')
-        return redirect(url_for('list_user_movies', user_id=user_id))
+        try:
+            data_manager.add_movie(user_id, title_from_api, year, rating, director, poster, imdb_url)
+            flash(f'Movie "{title_from_api}" was successfully added.')
+            return redirect(url_for('list_user_movies', user_id=user_id))
+        except Exception as e:
+            flash("Could not save the movie.")
+            print("DB Error:", e)
 
     return render_template('add_movie.html', user=user)
 
@@ -81,11 +91,29 @@ def update_movie(user_id, movie_id):
             "year" : request.form["year"],
             "rating" : request.form["rating"]
         }
-        data_manager.update_movie(movie_id, updated_details)
-        flash("Movie is updated")
-        return redirect(url_for('list_user_movies', user_id=user_id))
+        try:
+            data_manager.update_movie(movie_id, updated_details)
+            flash("Movie is updated")
+            return redirect(url_for('list_user_movies', user_id=user_id))
+        except Exception as e:
+            flash("Could not update the movie.")
+            print("Error:", e)
 
     return render_template("update_movie.html", movie=movie, user_id=user_id)
+
+
+@app.route('/update_user/<int:user_id>', methods=["GET", "POST"])
+def update_user(user_id):
+    user= data_manager.get_user(user_id)
+    if request.method == "POST":
+        user_data = {
+            "name": request.form["name"]
+        }
+        data_manager.update_user(user_id, user_data)
+
+        flash("Username updated")
+        return redirect(url_for('list_user_movies', user_id=user_id))
+    return render_template("update_user.html", user=user)
 
 
 @app.route('/users/<user_id>/delete_movie/<movie_id>', methods=["POST"])
@@ -98,14 +126,28 @@ def delete_movie(user_id, movie_id):
 
 
 @app.errorhandler(404)
-def page_not_found(e):#
+def page_not_found(e):
     if request.method =="POST":
         return redirect(url_for('list_users'))
     return render_template('404.html'), 404
 
+@app.errorhandler(405)
+def method_not_allowed(error):
+    if request.method =="POST":
+        return redirect(url_for('list_users'))
+    return render_template('404.html'), 405
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    print("💥 500 Error:", error)  # Optional logging
+    return render_template('500.html'), 500
+
+@app.errorhandler(Exception)
+def all_exception_handler(error):
+    print("💥 Unhandled Exception:", error)
+    return render_template("500.html"), 500
 
 if __name__ == '__main__':
     with app.app_context():
-        db.drop_all()
         db.create_all()
     app.run(debug=True)

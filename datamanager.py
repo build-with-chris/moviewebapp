@@ -52,6 +52,13 @@ class SQLiteDataManager(DataManagerInterface):
             self.db.session.commit()
         return movie
 
+    def update_user(self, user_id, user_data):
+        user=User.query.get(user_id)
+        if user:
+            user.user_name = user_data.get('name', user.user_name)
+            self.db.session.commit()
+        return user
+
     def delete_movie(self, movie_id):
         movie=Movie.query.get(movie_id)
         if movie:
