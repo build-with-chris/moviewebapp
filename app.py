@@ -19,7 +19,7 @@ data_manager = SQLiteDataManager(app)
 
 @app.route('/')
 def home():
-    return "Welcome to MovieWeb App!"
+    return redirect(url_for('list_users'))
 
 
 @app.route('/users')
@@ -123,6 +123,14 @@ def delete_movie(user_id, movie_id):
         data_manager.delete_movie(movie_id)
         flash(f'Movie {movie.movie_name} was successfully deleted.')
         return redirect(url_for(f'list_user_movies', user_id=user_id))
+
+@app.route('/delete_user/<user_id>', methods=["POST"])
+def delete_user(user_id):
+    user = data_manager.get_user(user_id)
+    if user:
+        data_manager.delete_user(user_id)
+        flash(f'User {user.user_name} was successfully deleted.')
+    return redirect(url_for(f'list_users'))
 
 
 @app.errorhandler(404)

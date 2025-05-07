@@ -7,7 +7,7 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String)
-    movies = db.relationship('Movie', backref='user', lazy=True)
+    movies = db.relationship('Movie', backref='user', cascade='all, delete', lazy=True)
 
     def __repr__(self):
         return f"User(id = {self.user_id}, name = {self.user_name})"

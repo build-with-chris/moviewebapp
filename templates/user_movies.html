@@ -1,46 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ user.user_name }}'s Movies</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
 {% extends "base.html" %}
 {% block title %}{{ user.user_name }}'s Movies{% endblock %}
+
 {% block content %}
+<div class="user-header">
     <h1>{{ user.user_name }}'s Favorite Movies</h1>
-    <div class="add-movie-bar">
+    <div class="user-action-bar">
+        <a class="btn small icon-only" href="/update_user/{{ user.user_id }}">
+            ✏️ <span class="btn-label">Change Name</span>
+        </a>
+        <form method="POST" action="/delete_user/{{ user.user_id }}">
+            <button class="btn small delete icon-only" type="submit">
+                ❌ <span class="btn-label">Delete User</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="add-movie-bar">
     <a href="/users/{{ user.user_id }}/add_movie">
         <button class="btn add">➕ Add Movie</button>
     </a>
-    <a href="/update_user/{{ user.user_id }}">
-        <button class="btn add">Change Name</button>
-    </a>
-    </div>
+</div>
 
-
-    <div class="movie-grid">
-        {% for movie in movies %}
-            <div class="movie-card">
-                <img src="{{ movie.poster_url }}" alt="{{ movie.movie_name }} Poster">
-                <h3>{{ movie.movie_name }}</h3>
-                <p>🎬 {{ movie.movie_director }}</p>
-                <p>📅 {{ movie.movie_year }}
-                        ⭐ {{ movie.movie_rating }}</p>
-                <a href="{{ movie.imdb_url }}" target="_blank">IMDb-Link</a>
-                <div class="movie-actions">
-                    <a href="/users/{{ user.user_id }}/update_movie/{{ movie.movie_id }}">
-                        <button class="btn update">✏️ Update</button>
-                    </a>
-                    <form method="POST" action="/users/{{ user.user_id }}/delete_movie/{{ movie.movie_id }}">
-                        <button class="btn delete" type="submit">❌ Delete</button>
-                    </form>
-                </div>
+<div class="movie-grid">
+    {% for movie in movies %}
+        <div class="movie-card">
+            <img src="{{ movie.poster_url }}" alt="{{ movie.movie_name }} Poster">
+            <h3>{{ movie.movie_name }}</h3>
+            <p>🎬 {{ movie.movie_director }}</p>
+            <p>📅 {{ movie.movie_year }} ⭐ {{ movie.movie_rating }}</p>
+            <a href="{{ movie.imdb_url }}" target="_blank">IMDb-Link</a>
+            <div class="movie-actions">
+                <a href="/users/{{ user.user_id }}/update_movie/{{ movie.movie_id }}">
+                    <button class="btn update">✏️ Edit</button>
+                </a>
+                <form method="POST" action="/users/{{ user.user_id }}/delete_movie/{{ movie.movie_id }}">
+                    <button class="btn delete" type="submit">❌ Delete</button>
+                </form>
             </div>
-        {% else %}
-            <p>No movies yet.</p>
-        {% endfor %}
-    </div>
+        </div>
+    {% else %}
+        <p>No movies yet.</p>
+    {% endfor %}
+</div>
 {% endblock %}
-</body>
-</html>

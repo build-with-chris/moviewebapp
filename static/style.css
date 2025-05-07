@@ -1,3 +1,20 @@
+@import url("https://fonts.googleapis.com/css?family=Rowdies");
+
+/* === GLOBAL === */
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1 {
+    font-family: 'Rowdies', sans-serif;
+    text-align: center;
+    color: #222;
+}
+
+/* === NAVBAR === */
 .navbar {
     background-color: #333;
     padding: 10px 20px;
@@ -15,23 +32,46 @@
     text-decoration: underline;
 }
 
+/* === LAYOUT === */
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 20px;
 }
-body {
-    font-family: Arial, sans-serif;
-    margin: 40px;
-    background-color: #f4f4f4;
-    color: #333;
+
+a {
+    text-decoration: none;
+    color: #007BFF;
 }
 
-h1 {
+a:hover {
+    text-decoration: underline;
+}
+
+/* === INTRO / STARTSEITE === */
+.intro {
     text-align: center;
-    color: #222;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffffdd;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
+.intro h1 {
+    font-family: 'Rowdies';
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+}
+
+.intro p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #444;
+}
+
+/* === MOVIE GRID === */
 .movie-grid {
     display: flex;
     flex-wrap: wrap;
@@ -50,8 +90,11 @@ h1 {
 }
 
 .movie-card img {
-    max-width: 100%;
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
     border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .movie-actions {
@@ -60,77 +103,29 @@ h1 {
     justify-content: space-around;
 }
 
-.btn {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+/* === USER HEADER + ACTIONS === */
+.user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    gap: 20px;
 }
 
-
-.btn.update {
-    background-color: #4B5320;
-    color: white;
+.user-header h1 {
+    margin: 0;
+    font-size: 28px;
 }
 
-.btn.delete {
-    background-color: #f44336;
-    color: white;
+.user-action-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
 }
 
-a {
-    text-decoration: none;
-    color: #007BFF;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.add-movie-bar {
-display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-    gap:20px;
-}
-
-.btn.add {
-    background-color: #2196F3;
-    color: white;
-    min-width: 150px;
-     height: 48px;
-    padding: 10px 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    text-align: center;
-    font-size: 16px;
-    text-align: center;
-}
-
-.movie-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.movie-table th, .movie-table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-}
-
-.movie-table th {
-    background-color: #333;
-    color: white;
-}
-
-.movie-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
+/* === USER LIST === */
 .user-list {
     display: flex;
     flex-wrap: wrap;
@@ -159,4 +154,224 @@ display: flex;
     text-decoration: none;
     color: #333;
     font-size: 1.2em;
+}
+
+/* === ADD MOVIE BUTTON BAR === */
+.add-movie-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+/* === BUTTON STYLES === */
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.btn.add {
+    background-color: #2196F3;
+    color: white;
+    min-width: 150px;
+    height: 48px;
+    font-size: 16px;
+}
+
+.btn.update {
+    background-color: #4B5320;
+    color: white;
+}
+
+.btn.delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn.small {
+    padding: 6px 10px;
+    font-size: 14px;
+    min-width: 100px;
+    height: 36px;
+}
+
+.btn.small.delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn.small:hover {
+    opacity: 0.9;
+}
+
+/* ICON-ONLY BUTTON (z. B. Mobilansicht) */
+.btn.icon-only {
+    background: none;
+    color: inherit;
+    padding: 4px;
+    font-size: 1.4rem;
+    min-width: auto;
+    height: auto;
+    border: none;
+    box-shadow: none;
+}
+
+.btn.icon-only:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.btn-label {
+    font-size: 0.85rem;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.btn.icon-only .btn-label {
+    display: inline;
+
+}
+
+/* === FORM STYLING === */
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.form-wrapper h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.form-card {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-card label {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.form-card input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.form-card input:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 5px rgba(33, 150, 243, 0.4);
+}
+
+/* === TABLE STYLING === */
+.movie-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.movie-table th, .movie-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.movie-table th {
+    background-color: #333;
+    color: white;
+}
+
+.movie-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+
+    /* Headline */
+    h1,
+    .user-header h1,
+    .intro h1 {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    .intro p {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    /* Movie Layout */
+    .movie-grid {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .movie-card {
+        width: 95%;
+        font-size: 1rem;
+        padding: 16px;
+    }
+
+    .movie-card img {
+        height: auto;
+        max-height: 350px;
+        object-fit: contain;
+    }
+
+    /* Action Buttons */
+    .movie-actions .btn {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+        min-width: unset;
+        height: auto;
+    }
+
+    .btn,
+    .btn.small {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        min-width: 100px;
+        height: auto;
+    }
+
+    .btn.add {
+        font-size: 1rem;
+        padding: 10px 16px;
+        min-width: 150px;
+    }
+
+    /* User Header Buttons Icon-Only */
+    .user-action-bar {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .btn.icon-only .btn-label {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .intro h1 {
+        font-size: 1.3rem;
+    }
 }

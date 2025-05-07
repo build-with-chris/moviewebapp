@@ -12,7 +12,14 @@
 {% block title %}All Users{% endblock %}
 
 {% block content %}
-<h1>👤 All Users</h1>
+<div class="intro">
+    <h1>🎥 The best Moviedatabase ever</h1>
+    <p>
+        In this menu, you choose your name and add movies. It happens to be connected to IMDb.
+        So just enter a title and the page will do its magic. <br><br>
+        Typed in a wrong name? No worries. I got you covered. Just click on your name and you’ll find options to change it.
+    </p>
+</div>
 <div class="user-list">
     {% for user in users %}
         <div class="user-card">
