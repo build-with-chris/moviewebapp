@@ -5,18 +5,24 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="static/style.css">
-    <title>Users</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">    <title>Users</title>
 </head>
 <body>
-<h1>Users</h1>
-<ul>
+{% extends "base.html" %}
+{% block title %}All Users{% endblock %}
+
+{% block content %}
+<h1>👤 All Users</h1>
+<div class="user-list">
     {% for user in users %}
-        <li>
-            <a href="/users/{{ user.user_id }}">{{ user.user_name }}</a>
-        </li>
+        <div class="user-card">
+            <a href="{{ url_for('list_user_movies', user_id=user.user_id) }}">{{ user.user_name }}</a>
+        </div>
+    {% else %}
+        <p>No users found.</p>
     {% endfor %}
-</ul>
+</div>
+{% endblock %}
 
 </body>
 </html>
