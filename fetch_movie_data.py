@@ -8,7 +8,7 @@ APIKEY = os.getenv("APIKEY")
 
 
 def fetching_movie_data(title):
-    """getting year, rating and poster from the official
+    """getting year, rating, director, link and poster from the official
     omb api according to the title input from the user"""
     url = f"http://www.omdbapi.com/?apikey={APIKEY}&t={title}"
     res = requests.get(url)
@@ -35,6 +35,7 @@ def fetching_movie_data(title):
                     imdb_rating = float(value.split("/")[0])
                     break
         poster_url = movie_data.get("Poster", "")
+        #adding a default poster
         if not poster_url or poster_url == "N/A":
             poster_url = "https://s2.qwant.com/thumbr/474x711/4/8/40532943d13fbdaf8ca7370a42729118071213994e016b1df5e0ba0c475ec6/th.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%3Fid%3DOIP.rQdMu0zwytqjkxEA5wZUAwHaLH%26pid%3DApi&q=0&b=1&p=0&a=0"
     except KeyError:

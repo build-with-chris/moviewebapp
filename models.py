@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model):
+    """setting up a simple User, that has a required name and is in relation to his/her movies
+    if a user gets deleted, it will also delete all the movies within the user"""
     __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, primary_key=True)
@@ -14,6 +16,7 @@ class User(db.Model):
 
 
 class Movie(db.Model):
+    """the Movie class has various attributes, connected to a user_id"""
     __tablename__ = 'movies'
 
     movie_id = db.Column(db.Integer, primary_key=True)

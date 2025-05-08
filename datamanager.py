@@ -28,6 +28,7 @@ class SQLiteDataManager(DataManagerInterface):
         return user
 
     def add_movie(self, user_id, title, year, rating, director, poster_url, imdb_url):
+        """adding a new movie with the values given by the OmDb Api"""
         new_movie = Movie(
             movie_name=title,
             movie_director=director,
@@ -42,7 +43,7 @@ class SQLiteDataManager(DataManagerInterface):
         return new_movie
 
     def update_movie(self, movie_id, movie_data):
-        """changing values, while providing a default"""
+        """changing values, while providing a default for the movie data"""
         movie=Movie.query.get(movie_id)
         if movie:
             movie.movie_name = movie_data.get('name', movie.movie_name)
@@ -53,6 +54,7 @@ class SQLiteDataManager(DataManagerInterface):
         return movie
 
     def update_user(self, user_id, user_data):
+        """rename a user"""
         user=User.query.get(user_id)
         if user:
             user.user_name = user_data.get('name', user.user_name)
