@@ -7,9 +7,22 @@
         <a class="btn small icon-only" href="/update_user/{{ user.user_id }}">
             ✏️ <span class="btn-label">Change Name</span>
         </a>
-
     </div>
 </div>
+
+<div class="assistant-form">
+    <form method="POST" action="{{ url_for('chat_assistant', user_id=user.user_id) }}">
+        <input type="text" name="message" placeholder="Ask the movie assistant..." required>
+        <button type="submit" class="btn ask">🎤 Ask</button>
+    </form>
+</div>
+
+{% if ai_reply %}
+<div class="ai-reply">
+    <h4>🎬 Assistant says:</h4>
+    <p>{{ ai_reply }}</p>
+</div>
+{% endif %}
 
 <div class="add-movie-bar">
     <a href="/users/{{ user.user_id }}/add_movie">
@@ -53,6 +66,7 @@
         <p>No movies yet.</p>
     {% endfor %}
 </div>
+
 
 <div style="text-align: center; margin-top: 40px;">
     <form method="POST" action="/delete_user/{{ user.user_id }}" onsubmit="return confirmDeleteUser();">

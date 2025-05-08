@@ -1,7 +1,8 @@
 from crypt import methods
 from flask import Flask, render_template, request, flash, url_for
-from flask.cli import load_dotenv
 from werkzeug.utils import redirect
+
+from AI import ask_movie_assistent
 from datamanager import SQLiteDataManager
 from models import db, User, Movie
 import fetch_movie_data
@@ -170,6 +171,16 @@ def add_review(user_id, movie_id):
         flash("Review added")
         return redirect(url_for('list_user_movies', user_id=user_id))
     return render_template('add_review.html', movie=movie)
+
+
+@app.route('/user/<int:user_id>/ask', methods=["POST"])
+def chat_assistant(user_id):
+    user_input=request.form["message"]
+    reply = ask_movie_assistent(user_input)
+    movies = data_manager.get_user_movies(user_id)
+    user = data_manager.get_user(user_id)
+    return render_template("user_movies.html", user=user, movies=movies, ai_reply=reply)
+
 
 
 

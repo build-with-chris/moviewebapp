@@ -513,4 +513,44 @@ a:hover {
 
 .poster-wrapper:hover .review-overlay {
     opacity: 1;
-}}
+}
+.assistant-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.assistant-form input[type="text"] {
+    padding: 8px;
+    font-size: 1rem;
+    width: 50%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.btn.ask {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    background-color: #5e35b1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.ai-reply {
+    max-width: 700px;
+    margin: 20px auto;
+    background-color: #fffbea;
+    border-left: 6px solid #ffc107;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    font-size: 1rem;
+    color: #333;
+}
+
+}
