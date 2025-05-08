@@ -27,6 +27,7 @@ class Movie(db.Model):
     poster_url = db.Column(db.String)
     imdb_url = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    reviews = db.relationship('Review', backref='movie', cascade="all, delete-orphan")
 
 
 class Review(db.Model):

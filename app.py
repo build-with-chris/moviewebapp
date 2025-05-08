@@ -1,3 +1,5 @@
+from crypt import methods
+
 from flask import Flask, render_template, request, flash, url_for
 import os
 
@@ -154,9 +156,20 @@ def delete_user(user_id):
     return redirect(url_for(f'list_users'))
 
 
-@app.route('/users/<int:user_id>/<int:movie_id>/add_review')
-def add_review(movie_id):
-    pass
+@app.route('/users/<int:user_id>/add_review/<int:movie_id>', methods=["GET", "POST"])
+def add_review(user_id, movie_id):
+    movie = data_manager.get_movie(movie_id)
+    if not movie:
+        flash("Movie is not in the database yet")
+        return redirect(url_for('list_user_movies', user_id=user_id, movie_id=movie_id))
+    if request.method == 'POST':
+        review_text = request.form["review"]
+        data_manager.add_review(movie_id, review_text)
+        flash("Review added")
+        return redirect(url_for('list_user_movies', user_id=user_id))
+    return render_template('add_review.html', movie=movie)
+
+
 
 #simple error handling that redirects to a template
 @app.errorhandler(404)

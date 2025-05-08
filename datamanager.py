@@ -73,13 +73,13 @@ class SQLiteDataManager(DataManagerInterface):
             self.db.session.delete(movie)
             self.db.session.commit()
 
-    def add_review(self, movie_id):
+    def add_review(self, movie_id, review_text):
         movie=Movie.query.get(movie_id)
         if not movie:
             return None
         new_review = Review(
-            review_text="review_text",
-            movie_id="movie_id"
+            review_text=review_text,
+            movie_id=movie_id
         )
         self.db.session.add(new_review)
         self.db.session.commit()

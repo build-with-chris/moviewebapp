@@ -17,10 +17,20 @@
     </a>
 </div>
 
+
+
+
 <div class="movie-grid">
     {% for movie in movies %}
         <div class="movie-card">
-            <img src="{{ movie.poster_url }}" alt="{{ movie.movie_name }} Poster">
+            <div class="poster-wrapper">
+        <img src="{{ movie.poster_url }}" alt="{{ movie.movie_name }} Poster">
+        {% if movie.reviews %}
+        <div class="review-overlay">
+            <p>{{ movie.reviews[0].review_text }}</p>  <!-- nur das erste Review anzeigen -->
+        </div>
+                {% endif %}
+        </div>
             <h3>{{ movie.movie_name }}</h3>
             <p>🎬 {{ movie.movie_director }}</p>
             <p>📅 {{ movie.movie_year }} ⭐ {{ movie.movie_rating }}</p>
@@ -32,6 +42,11 @@
                 <form method="POST" action="/users/{{ user.user_id }}/delete_movie/{{ movie.movie_id }}">
                     <button class="btn delete" type="submit">❌ Delete</button>
                 </form>
+            </div>
+            <div>
+                <a href="{{ url_for('add_review', user_id=user.user_id, movie_id=movie.movie_id) }}">
+            <button class="btn update" style="margin-top : 10px">💞 Add Review</button>
+                </a>
             </div>
         </div>
     {% else %}

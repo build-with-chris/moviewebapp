@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Your Review{% endblock %}
+
+{% block content %}
+    <h1>Add a review for {{ movie.movie_name }}</h1>
+   <div class="form-wrapper">
+    <form method="POST" class="form-card large-review">
+        <label for="review">Review:</label>
+        <textarea name="review" rows="6" required></textarea>
+        <button type="submit" class="btn update">➕ Add Review</button>
+    </form>
+</div>
+{% endblock %}
