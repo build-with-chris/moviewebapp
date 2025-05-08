@@ -69,7 +69,6 @@ Each user has their own little movie universe: add, update, or remove movies wit
 ## 🧭 Next steps (for future development)
 
 - Add user login/authentication
-- Allow users to rate movies themselves
 - Tag movies with genres or custom labels
 - Switch to PostgreSQL for production
 - Add search or filter options for large movie lists
