@@ -8,11 +8,7 @@
         <a class="btn small icon-only" href="/update_user/{{ user.user_id }}">
             ✏️ <span class="btn-label">Change Name</span>
         </a>
-        <form method="POST" action="/delete_user/{{ user.user_id }}">
-            <button class="btn small delete icon-only" type="submit">
-                ❌ <span class="btn-label">Delete User</span>
-            </button>
-        </form>
+
     </div>
 </div>
 
@@ -42,5 +38,13 @@
     {% else %}
         <p>No movies yet.</p>
     {% endfor %}
+</div>
+
+<div style="text-align: center; margin-top: 40px;">
+    <form method="POST" action="/delete_user/{{ user.user_id }}" onsubmit="return confirmDeleteUser();">
+            <button class="btn small delete icon-only" type="submit">
+                ❌ <span class="btn-label">Delete User</span>
+            </button>
+    </form>
 </div>
 {% endblock %}

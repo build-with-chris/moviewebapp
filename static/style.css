@@ -375,3 +375,35 @@ a:hover {
         font-size: 1.3rem;
     }
 }
+
+.flash-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.flash-message {
+    background-color: #dff0d8; /* soft green */
+    color: #3c763d;
+    padding: 12px 20px;
+    border-left: 6px solid #3c763d;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    animation: fadeInSlide 0.5s ease-in-out;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

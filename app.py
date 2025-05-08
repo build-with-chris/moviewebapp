@@ -38,7 +38,8 @@ def list_user_movies(user_id):
     user = data_manager.get_user(user_id)
     movies = data_manager.get_user_movies(user_id)
     if not user:
-        return f"User not found"
+        flash("User is not in the database yet")
+        return redirect(url_for('list_users'))
     return render_template('user_movies.html', user=user, movies=movies)
 
 
@@ -84,6 +85,9 @@ def add_movie(user_id):
 @app.route('/users/<user_id>/update_movie/<movie_id>', methods=["GET", "POST"])
 def update_movie(user_id, movie_id):
     movie = data_manager.get_movie(movie_id)
+    if  not movie:
+        flash("Movie is not in the database yet")
+        return redirect(url_for('list_user_movies', user_id=user_id))
     if request.method =='POST':
         updated_details = {
             "name" : request.form["name"],
