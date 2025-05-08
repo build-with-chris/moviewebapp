@@ -18,13 +18,13 @@ def test_add_user(client):
     assert response.status_code == 200
     assert b"Testuser" in response.data
 
+
 def test_edit_name(client):
     response = client.post("/add_user", data={"name": "Old"}, follow_redirects=True)
     user = User.query.filter_by(user_name="Old").first()
 
     response = client.post(f'/update_user/{user.user_id}', data={"name": "New"}, follow_redirects=True)
     assert response.status_code == 200
-
 
 
 def test_delete_user(client):
