@@ -1,27 +1,29 @@
 from crypt import methods
-
 from flask import Flask, render_template, request, flash, url_for
-import os
-
 from flask.cli import load_dotenv
 from werkzeug.utils import redirect
 from datamanager import SQLiteDataManager
 from models import db, User, Movie
 import fetch_movie_data
-import dotenv
+from dotenv import load_dotenv
 import os
+from api import api, init_api
 
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'data', 'moviewebapp.db')
+
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, 'data', 'moviewebapp.db')
-
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
 data_manager = SQLiteDataManager(app)
+
+
+init_api(data_manager)
+app.register_blueprint(api, url_prefix='/api')
 
 
 @app.route('/')
