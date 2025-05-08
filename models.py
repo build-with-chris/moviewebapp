@@ -29,4 +29,10 @@ class Movie(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
 
+class Review(db.Model):
+    __tablename__ = 'reviews'
+
+    review_id = db.Column(db.Integer, primary_key=True)
+    review_text = db.Column(db.String)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id'))
 

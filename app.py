@@ -154,6 +154,10 @@ def delete_user(user_id):
     return redirect(url_for(f'list_users'))
 
 
+@app.route('/users/<int:user_id>/<int:movie_id>/add_review')
+def add_review(movie_id):
+    pass
+
 #simple error handling that redirects to a template
 @app.errorhandler(404)
 def page_not_found(e):
