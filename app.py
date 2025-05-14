@@ -1,14 +1,15 @@
-from crypt import methods
-from flask import Flask, render_template, request, flash, url_for
+
+from flask import Flask, render_template, request, flash, url_for, send_from_directory
 from werkzeug.utils import redirect
 
 from AI import ask_movie_assistent
 from datamanager import SQLiteDataManager
-from models import db, User, Movie
+from models import db, Movie
 import fetch_movie_data
 from dotenv import load_dotenv
 import os
 from api import api, init_api
+import sys
 
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -18,6 +19,7 @@ DB_PATH = os.path.join(BASE_DIR, 'data', 'moviewebapp.db')
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
 data_manager = SQLiteDataManager(app)
@@ -74,28 +76,39 @@ def add_user():
 
 
 @app.route('/users/<int:user_id>/add_movie', methods=["GET", "POST"])
+@app.route('/users/<int:user_id>/add_movie', methods=["GET", "POST"])
 def add_movie(user_id):
-    """adding a movie by inserting a title. The rest is done by oMDb Api
-    if no title was found it flashes a message and redirects you to user_movies"""
-    user=data_manager.get_user(user_id)
+    """adding a movie by inserting a title. The rest is done by OMDb API"""
+    user = data_manager.get_user(user_id)
+    app.logger.info(f"🛠️ Entered add_movie for user_id={user_id}, method={request.method}")
     if request.method == 'POST':
-        title = request.form['title']
+        title = request.form.get('title')
+        if not title:
+            app.logger.warning("No title provided in add_movie form!")
+            flash("Bitte gib einen Filmtitel ein.")
+            return redirect(url_for('add_movie', user_id=user_id))
 
-        values = fetch_movie_data.fetching_movie_data(title)
-
-        if isinstance(values, str):
-            flash(values)
+        # Fetch movie data from OMDB
+        result = fetch_movie_data.fetching_movie_data(title)
+        if isinstance(result, str):
+            app.logger.error(f"OMDB fetch error: {result}")
+            flash(result)
             return redirect(url_for('list_user_movies', user_id=user_id))
 
-        title_from_api, year, rating, director, poster, imdb_url = values
+        title_from_api, year, rating, director, poster_url, imdb_url = result
         try:
-            data_manager.add_movie(user_id, title_from_api, year, rating, director, poster, imdb_url)
-            flash(f'Movie "{title_from_api}" was successfully added.')
+            new_movie = data_manager.add_movie(
+                user_id, title_from_api, year, rating, director, poster_url, imdb_url
+            )
+            app.logger.info(f"✅ Movie added: {title_from_api}")
+            flash(f'Film "{title_from_api}" wurde erfolgreich hinzugefügt.')
             return redirect(url_for('list_user_movies', user_id=user_id))
         except Exception as e:
-            flash("Could not save the movie.")
-            print("DB Error:", e)
+            app.logger.exception("🔥 Fehler beim Speichern des neuen Films")
+            flash("Konnte den Film nicht speichern.")
+            return redirect(url_for('list_user_movies', user_id=user_id))
 
+    # GET request: render the add form
     return render_template('add_movie.html', user=user)
 
 
@@ -124,18 +137,25 @@ def update_movie(user_id, movie_id):
     return render_template("update_movie.html", movie=movie, user_id=user_id)
 
 
-@app.route('/update_user/<int:user_id>', methods=["GET", "POST"])
+@app.route('/users/<int:user_id>/edit', methods=["GET", "POST"])
 def update_user(user_id):
-    """change the username"""
-    user= data_manager.get_user(user_id)
+    user = data_manager.get_user(user_id)
     if request.method == "POST":
-        new_name = {
+        # Debug-Log, um sicherzugehen, dass wir hier ankommen:
+        print(f"🛠️ Entered POST update_user for id={user_id}", file=sys.stderr, flush=True)
+        try:
+            new_name = {
             "name": request.form["name"]
-        }
-        data_manager.update_user(user_id, new_name)
-
-        flash("Username updated")
-        return redirect(url_for('list_user_movies', user_id=user_id))
+            }
+            data_manager.update_user(user_id, new_name)
+            flash("Username updated")
+            return redirect(url_for('list_user_movies', user_id=user_id))
+        except Exception as e:
+            # Schiebe den vollständigen Traceback ins Error-Log
+            app.logger.exception("🔥 Exception in update_user")
+            # Zeige dem User wenigstens eine Fehlermeldung
+            return render_template("update_user.html", user=user,
+                                   error="Beim Speichern ist ein interner Fehler aufgetreten"), 500
     return render_template("update_user.html", user=user)
 
 
@@ -182,7 +202,13 @@ def chat_assistant(user_id):
     return render_template("user_movies.html", user=user, movies=movies, ai_reply=reply)
 
 
-
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static'),
+        'favicon.ico',
+        mimetype='image/vnd.microsoft.icon'
+    )
 
 #simple error handling that redirects to a template
 @app.errorhandler(404)
@@ -206,6 +232,7 @@ def internal_server_error(error):
 def all_exception_handler(error):
     print("💥 Unhandled Exception:", error)
     return render_template("500.html"), 500
+
 
 
 if __name__ == '__main__':

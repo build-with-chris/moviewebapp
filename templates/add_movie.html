@@ -1,12 +1,38 @@
 {% extends "base.html" %}
-{% block title %}Add Movies{% endblock %}
+{% block title %}Add Movie{% endblock %}
 
 {% block content %}
+  <h1>Film hinzufügen für {{ user.user_name }}</h1>
 
-<h1>Add a Movie by Title</h1>
-    <form method="POST">
-        <label for="title">Movie Title:</label>
-        <input type="text" name="title" required>
-        <button type="submit">Search & Add</button>
-    </form>
+  {# Flash-Messages anzeigen #}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for msg in messages %}
+          <li>{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <form
+    method="POST"
+    action="{{ url_for('add_movie', user_id=user.user_id) }}"
+  >
+    <label for="title">Movie title:</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      placeholder="z. B. Inception"
+      required
+    >
+    <button type="submit">Search &amp; Add</button>
+  </form>
+
+  <p>
+    <a href="{{ url_for('list_user_movies', user_id=user.user_id) }}">
+      ← back to user
+    </a>
+  </p>
 {% endblock %}

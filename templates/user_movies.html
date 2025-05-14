@@ -40,7 +40,7 @@
         <img src="{{ movie.poster_url }}" alt="{{ movie.movie_name }} Poster">
         {% if movie.reviews %}
         <div class="review-overlay">
-            <p>{{ movie.reviews[0].review_text }}</p>  <!-- nur das erste Review anzeigen -->
+            <p>{{ movie.reviews[-1].review_text }}</p>
         </div>
                 {% endif %}
         </div>
