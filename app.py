@@ -29,8 +29,18 @@ else:
 data_manager = SQLiteDataManager(app)
 
 
+
 init_api(data_manager)
 app.register_blueprint(api, url_prefix='/api')
+
+# Ensure the Flask instance folder exists for the SQLite database
+import os
+os.makedirs(app.instance_path, exist_ok=True)
+
+# Initialize the database tables on first request (for Serverless environments)
+@app.before_first_request
+def initialize_database():
+    db.create_all()
 
 
 @app.route('/')
