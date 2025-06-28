@@ -10,18 +10,22 @@ from dotenv import load_dotenv
 import os
 from api import api, init_api
 import sys
+from config import DevelopmentConfig, ProductionConfig
+
+
+
 
 load_dotenv()
-SECRET_KEY = os.getenv('SECRET_KEY')
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, 'data', 'moviewebapp.db')
 
 
 app = Flask(__name__)
-app.secret_key = SECRET_KEY
+env = os.getenv('FLASK_ENV', 'development')
+if env == 'production':
+    app.config.from_object(ProductionConfig)
+else:
+    app.config.from_object(DevelopmentConfig)
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
 data_manager = SQLiteDataManager(app)
 
 
