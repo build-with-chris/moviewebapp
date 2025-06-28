@@ -12,15 +12,12 @@
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="navbar-inner">
-            <a href="{{ url_for('list_users') }}">👯 See Users</a>
-            <a href="{{ url_for('add_user') }}"> 👻 Add User</a>
-            <a href="{{ url_for('all_movies') }}">🎬 All Movies</a>
-        </div>
-    </nav>
-
     <div class="container">
+        <nav class="navbar">
+            <a href="{{ url_for('list_users') }}">👯 See Users</a>
+            <a href="{{ url_for('add_user') }}">👻 Add User</a>
+            <a href="{{ url_for('all_movies') }}">🎬 All Movies</a>
+        </nav>
         {% with messages = get_flashed_messages() %}
   {% if messages %}
     <div class="flash-container">

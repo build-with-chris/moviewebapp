@@ -4,18 +4,16 @@
 <div class="user-header">
     <h1>{{ user.user_name }}'s Favorite Movies</h1>
     <div class="user-action-bar">
-        <a class="btn small icon-only" href="/update_user/{{ user.user_id }}">
+        <a class="btn small icon-only" href="/users/{{ user.user_id }}/edit">
             ✏️ <span class="btn-label">Change Name</span>
         </a>
     </div>
 </div>
 
-<div class="assistant-form">
-    <form method="POST" action="{{ url_for('chat_assistant', user_id=user.user_id) }}">
-        <input type="text" name="message" placeholder="Ask the movie assistant..." required>
-        <button type="submit" class="btn ask">🎤 Ask</button>
-    </form>
-</div>
+<form class="assistant-form" method="POST" action="{{ url_for('chat_assistant', user_id=user.user_id) }}">
+    <input type="text" name="message" placeholder="Ask the movie assistant..." required>
+    <button type="submit" class="btn ask">🎤 Ask</button>
+</form>
 
 {% if ai_reply %}
 <div class="ai-reply">
@@ -33,6 +31,7 @@
 
 
 
+<div class="movie-grid-container">
 <div class="movie-grid">
     {% for movie in movies %}
         <div class="movie-card">
@@ -66,9 +65,10 @@
         <p>No movies yet.</p>
     {% endfor %}
 </div>
+</div>
 
 
-<div style="text-align: center; margin-top: 40px;">
+<div style="text-align: center; margin: 40px;">
     <form method="POST" action="/delete_user/{{ user.user_id }}" onsubmit="return confirmDeleteUser();">
             <button class="btn small delete icon-only" type="submit">
                 ❌ <span class="btn-label">Delete User</span>
